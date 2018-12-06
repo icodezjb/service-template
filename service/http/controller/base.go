@@ -5,6 +5,7 @@ import (
 
 	"context"
 
+	"github.com/buchenglei/service-template/common/definition"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,7 +39,7 @@ func (base *baseController) newBaseContext() context.Context {
 	ctx := context.Background()
 
 	// 携带基础的上下文信息
-	ctx = context.WithValue(ctx, "request_id", "xxxxxxxx")
+	ctx = context.WithValue(ctx, definition.FieldRequestId, "xxxxxxxx")
 
 	return ctx
 }

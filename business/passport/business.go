@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/buchenglei/service-template/business/error"
+	"github.com/buchenglei/service-template/common/definition"
 	"github.com/buchenglei/service-template/common/util"
 	"github.com/buchenglei/service-template/module"
 	userModule "github.com/buchenglei/service-template/module/user"
@@ -27,10 +28,11 @@ func New() *Business {
 }
 
 func (b *Business) Login(ctx context.Context, param LoginParam) (string, util.Error) {
+	requestId := util.GetContextStringValue(ctx, definition.FieldRequestId)
 	// 检查账号是否存在
 	exist, err := b.userHandler.AccountExists(ctx, param.Account)
 	if err != nil {
-		return "", error.ErrModuleInvoke.WithSource("Login->userHandler.AccountExists").WithError(err)
+		return "", error.ErrModuleInvoke.WithSource("(request_id: %s)Login->userHandler.AccountExists", requestId).WithError(err)
 	}
 
 	if !exist {
@@ -40,7 +42,7 @@ func (b *Business) Login(ctx context.Context, param LoginParam) (string, util.Er
 	// 检查用户账户安全性，判断是否允许用户登录
 	isSafe, reason, err := b.safeHandler.CheckAccountState(ctx, param.Account)
 	if err != nil {
-		return "", error.ErrModuleInvoke.WithSource("Login->userHandler.CheckAccountState").WithError(err)
+		return "", error.ErrModuleInvoke.WithSource("(request_id: %s)Login->userHandler.CheckAccountState", requestId).WithError(err)
 	}
 
 	if !isSafe {
@@ -50,15 +52,15 @@ func (b *Business) Login(ctx context.Context, param LoginParam) (string, util.Er
 	// 比较用户密码信息
 	pwd, salt, err := b.userHandler.GetUserPassword(ctx, param.Account)
 	if err != nil {
-		return "", error.ErrModuleInvoke.WithSource("Login->userHandler.GetUserPassword").WithError(err)
+		return "", error.ErrModuleInvoke.WithSource("(request_id: %s)Login->userHandler.GetUserPassword", requestId).WithError(err)
 	}
 
 	succ, token, err := b.userHandler.CheckUserPassword(ctx, param.Password, pwd, salt)
 	if err != nil {
-		return "", error.ErrUserLogin.WithSource("Login->userHandler.CheckUserPassword").WithError(err)
+		return "", error.ErrUserLogin.WithSource("(request_id: %s)Login->userHandler.CheckUserPassword", requestId).WithError(err)
 	}
 	if !succ {
-		return "", error.ErrUserLogin.WithSource("Login->userHandler.CheckUserPassword").WithError(errors.New("用户密码不正确"))
+		return "", error.ErrUserLogin.WithSource("(request_id: %s)Login->userHandler.CheckUserPassword", requestId).WithError(errors.New("用户密码不正确"))
 	}
 
 	// 记录用户登录行为

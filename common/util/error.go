@@ -26,8 +26,13 @@ func (e CommonError) WithError(err error) CommonError {
 	return e
 }
 
-func (e CommonError) WithSource(source string) CommonError {
-	e.source = source
+func (e CommonError) WithSource(source string, params ...interface{}) CommonError {
+	if len(params) == 0 {
+		e.source = source
+	} else {
+		e.source = fmt.Sprintf(source, params...)
+	}
+
 	return e
 }
 
