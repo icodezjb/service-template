@@ -18,7 +18,7 @@ func DoWithTimeout(ctx context.Context, f func()) error {
 
 	select {
 	case <-ctx.Done():
-		log.Fatalf("[%v]redis处理超时", ctx.Value(definition.FieldRequestId))
+		log.Fatalf("[%v]处理超时", ctx.Value(definition.FieldRequestId))
 		return ctx.Err()
 	case <-c:
 		return nil
