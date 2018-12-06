@@ -7,6 +7,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/buchenglei/service-template/common/definition"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,7 +32,7 @@ func (passport *PassportController) Login(ctx *gin.Context) {
 
 	err := ctx.BindJSON(&params)
 	if err != nil {
-		passport.response(ErrParams.WithError(err), nil)
+		passport.response(definition.ErrParams.WithError(err), nil)
 		return
 	}
 

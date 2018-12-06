@@ -1,11 +1,25 @@
-package error
+package definition
 
 import (
+	"net/http"
+
 	"github.com/buchenglei/service-template/common/util"
 )
 
 // 业务层统一错误定义
 var (
+	ErrSuccess = util.CommonError{
+		Code:       0,
+		HttpStatus: http.StatusOK,
+		Message:    "success",
+	}
+
+	ErrParams = util.CommonError{
+		Code:       100,
+		HttpStatus: http.StatusBadRequest,
+		Message:    "请求参数错误",
+	}
+
 	ErrModuleInvoke = util.CommonError{
 		Code:    1000,
 		Message: "系统错误",

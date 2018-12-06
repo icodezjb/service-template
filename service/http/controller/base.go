@@ -25,7 +25,7 @@ func (base *baseController) init(ctx *gin.Context) {
 
 func (base *baseController) response(err util.Error, data interface{}) {
 	if err == nil {
-		err = ErrSuccess
+		err = definition.ErrSuccess
 	}
 
 	base.ctx.JSON(err.ErrHttpStatus(), responseData{
