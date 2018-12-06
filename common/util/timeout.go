@@ -2,8 +2,9 @@ package util
 
 import (
 	"context"
-	"errors"
 	"log"
+
+	"github.com/buchenglei/service-template/common/definition"
 )
 
 func DoWithTimeout(ctx context.Context, f func()) error {
@@ -17,8 +18,8 @@ func DoWithTimeout(ctx context.Context, f func()) error {
 
 	select {
 	case <-ctx.Done():
-		log.Fatalf("[%v]redis处理超时", ctx.Value("request_id"))
-		return errors.New("访问超时")
+		log.Fatalf("[%v]redis处理超时", ctx.Value(definition.FieldRequestId))
+		return ctx.Err()
 	case <-c:
 		return nil
 	}
