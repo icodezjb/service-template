@@ -2,27 +2,23 @@ package util
 
 import (
 	"context"
-	"log"
-
-	"github.com/buchenglei/service-template/common/definition"
 )
 
-func DoWithTimeout(ctx context.Context, f func()) error {
-	c := make(chan bool, 1)
+func DoWithTimeout(ctx context.Context, f func() error) error {
+	executeChan := make(chan bool, 1)
 
+	var handlerErr error
 	go func() {
-		f()
+		handlerErr = f()
 		// 执行完函数以后，关闭channel
-		close(c)
+		close(executeChan)
 	}()
 
 	select {
 	case <-ctx.Done():
-		log.Fatalf("[%v]处理超时", ctx.Value(definition.FieldRequestId))
 		return ctx.Err()
-	case <-c:
-		return nil
+	case <-executeChan:
 	}
 
-	return nil
+	return handlerErr
 }
