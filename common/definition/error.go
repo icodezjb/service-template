@@ -3,6 +3,8 @@ package definition
 import (
 	"net/http"
 
+	"errors"
+
 	"github.com/buchenglei/service-template/common/util"
 )
 
@@ -39,4 +41,9 @@ var (
 		Code:    1003,
 		Message: "用户账号存在安全风险",
 	}
+)
+
+// 内部统一错误标识
+var (
+	ErrUnknown = errors.New("miss a unknown error")
 )

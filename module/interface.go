@@ -18,5 +18,5 @@ type RecordModule interface {
 }
 
 type MessageModule interface {
-	SendUserLoginMessage(ctx context.Context, account string) error
+	AsyncSendUserLoginMessage(ctx context.Context, account string)
 }

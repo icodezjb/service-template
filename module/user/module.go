@@ -21,7 +21,7 @@ func New() *Module {
 func (*Module) AccountExists(ctx context.Context, account string) (exist bool, err error) {
 	// 如果在指定的超时时间内没有完成方法的执行，那么就会返回超时的报错
 	// 这里只是做一个示例，如果需要更细力度的单独控制redis超时，或是mysql超时
-	// 可以再将ctx向下传递，不少第三方库都支持xtx，这里仅仅只是demo
+	// 可以再将ctx向下传递，不少第三方库都支持ctx，这里仅仅只是demo
 	err = util.DoWithTimeout(ctx, func() error {
 		// 先检查redis中是否存在
 		var innerErr error

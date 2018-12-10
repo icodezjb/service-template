@@ -38,8 +38,11 @@ func (base *baseController) response(err util.Error, data interface{}) {
 func (base *baseController) newBaseContext() context.Context {
 	ctx := context.Background()
 
-	// 携带基础的上下文信息
+	// 携带请求的上下文信息
 	ctx = context.WithValue(ctx, definition.FieldRequestId, "xxxxxxxx")
+	ctx = context.WithValue(ctx, definition.FieldDeviceId, "xxxxxxxx")
+	ctx = context.WithValue(ctx, definition.FieldPackageId, "xxxxxxxx")
+	ctx = context.WithValue(ctx, definition.FieldVersion, "v1")
 
 	return ctx
 }

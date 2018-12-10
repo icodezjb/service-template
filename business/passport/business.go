@@ -10,7 +10,6 @@ import (
 	"github.com/buchenglei/service-template/common/definition"
 	"github.com/buchenglei/service-template/common/util"
 	"github.com/buchenglei/service-template/module"
-	userModule "github.com/buchenglei/service-template/module/user"
 )
 
 type Business struct {
@@ -22,7 +21,8 @@ type Business struct {
 
 func New() *Business {
 	return &Business{
-		userHandler: userModule.New(),
+		userHandler:    module.NewUserModule(definition.VersionLatest),
+		messageHandler: module.NewMessageModule(definition.VersionLatest),
 	}
 }
 
@@ -68,9 +68,7 @@ func (b *Business) Login(ctx context.Context, param LoginParam) (string, util.Er
 	}
 
 	// 发送用户登录消息
-	if err = b.messageHandler.SendUserLoginMessage(ctx, param.Account); err != nil {
-		log.Println("xxxxxxxxx")
-	}
+	b.messageHandler.AsyncSendUserLoginMessage(ctx, param.Account)
 
 	return token, nil
 }
