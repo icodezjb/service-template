@@ -39,7 +39,7 @@
     - **mysql** 操作mysql数据
     - **redis** 操作redis数据
     - **kafka** 操作消息队列数据
-    - **thirdpart** 操作第三方接口数据
+    - **external** 操作外部第三方接口数据
     - **other-micro-service** 操作其他服务数据
 - **common** (公共模块，例如一些常量方法需要贯穿若干层，即将他们抽出到这里来)
     - **sdk** (对接第三方一些接口的sdk)

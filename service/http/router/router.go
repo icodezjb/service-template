@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetRouters() *gin.Engine {
+func New() *gin.Engine {
 	r := gin.Default()
 
 	// 用户登录相关路由

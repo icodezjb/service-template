@@ -10,7 +10,7 @@ func main() {
 	// demo
 	config.WebAddress = ":8080"
 
-	httpService := router.GetRouters()
+	httpService := router.New()
 	err := httpService.Run(config.WebAddress)
 	if err != nil {
 		panic(err)

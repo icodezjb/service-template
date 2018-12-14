@@ -3,15 +3,20 @@ package config
 import (
 	"log"
 	"sync"
+
+	"github.com/buchenglei/service-template/common/definition"
 )
 
 var (
 	configInstance *Config
+
+	ServiceEnv definition.Environment
 )
 
 type Config struct {
 	Locker sync.RWMutex
 
+	Env        string
 	WebAddress string
 }
 
@@ -20,6 +25,9 @@ func init() {
 	if err := configInstance.load(); err != nil {
 		panic("init config error: " + err.Error())
 	}
+
+	// 程序启动后初始化一次环境变量
+	ServiceEnv = definition.Environment(configInstance.Env)
 
 	configInstance.watch()
 }

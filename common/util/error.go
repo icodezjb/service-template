@@ -8,7 +8,6 @@ type Error interface {
 	error
 
 	ErrCode() int
-	ErrHttpStatus() int
 	ErrMessage() string
 }
 
@@ -40,10 +39,6 @@ func (e CommonError) WithSource(source string, params ...interface{}) CommonErro
 
 func (e CommonError) ErrCode() int {
 	return e.Code
-}
-
-func (e CommonError) ErrHttpStatus() int {
-	return e.HttpStatus
 }
 
 func (e CommonError) ErrMessage() string {

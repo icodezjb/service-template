@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/buchenglei/service-template/common/definition"
+	"github.com/buchenglei/service-template/common/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,53 +30,49 @@ func NewPassportController() *PassportController {
 	}
 }
 
-func (passport *PassportController) Login(ctx *gin.Context) {
+func (passport *PassportController) Login(c *gin.Context) {
+	// 定义该业务的请求超时时间
+	businessCtx, cancel := context.WithTimeout(passport.init(c), 3*time.Second)
+	defer cancel()
+
 	// 获取请求参数
 	params := struct {
 		Account  string `json:"account"`
 		Password string `json:"password"`
 	}{}
 
-	err := ctx.BindJSON(&params)
+	err := c.BindJSON(&params)
 	if err != nil {
-		passport.response(definition.ErrParams.WithError(err), nil)
+		passport.response(businessCtx, definition.ErrParams.WithError(err), nil)
 		return
 	}
-
-	// 定义该业务的请求超时时间
-	businessCtx, cancel := context.WithTimeout(passport.newBaseContext(), 3*time.Second)
-	defer cancel()
 
 	/*************************************************************************************/
 
 	// 加载对应的业务流程实现
 	// 默认使用最新的版本
-	token, bErr := passport.passportHandler.Login(businessCtx, passportBusiness.LoginParam{
-		Account:  params.Account,
-		Password: params.Password,
-		ClientIP: ctx.ClientIP(),
-	})
-	if err != nil {
-		passport.response(bErr, nil)
-		return
+	// Example 创建对应版本的handler对应版本的business
+	version := definition.Version(util.GetContextStringValue(businessCtx, definition.MetadataVersion))
+
+	passportHandler := passport.passportHandler
+	if version != definition.VersionLatest {
+		passportHandler = business.NewPassportBusiness(version)
 	}
 
-	// Example 创建对应版本的handler对应版本的business
-	passportHandlerForVersion := business.NewPassportBusiness(definition.Version_1)
-	token, bErr = passportHandlerForVersion.Login(businessCtx, passportBusiness.LoginParam{
+	token, bErr := passportHandler.Login(businessCtx, passportBusiness.LoginParam{
 		Account:  params.Account,
 		Password: params.Password,
-		ClientIP: ctx.ClientIP(),
+		ClientIP: c.ClientIP(),
 	})
 	if err != nil {
-		passport.response(bErr, nil)
+		passport.response(businessCtx, bErr, nil)
 		return
 	}
 
 	/*************************************************************************************/
 
-	ctx.SetCookie("plu", token, 3600, "/", "", true, true)
-	passport.response(nil, nil)
+	c.SetCookie("plu", token, 3600, "/", "", true, true)
+	passport.response(businessCtx, nil, nil)
 }
 
 func (passport *PassportController) Register(ctx *gin.Context) {

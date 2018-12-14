@@ -27,7 +27,7 @@ func New() *Business {
 }
 
 func (b *Business) Login(ctx context.Context, param LoginParam) (string, util.Error) {
-	requestId := util.GetContextStringValue(ctx, definition.FieldRequestId)
+	requestId := util.GetContextStringValue(ctx, definition.MetadataRequestId)
 	// 检查账号是否存在
 	exist, err := b.userHandler.AccountExists(ctx, param.Account)
 	if err != nil {
