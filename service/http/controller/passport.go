@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/buchenglei/service-template/business"
-	passportBusiness "github.com/buchenglei/service-template/business/passport"
+	passportBusinessPkg "github.com/buchenglei/service-template/business/passport"
 
 	"context"
 	"time"
@@ -15,7 +15,7 @@ import (
 type PassportController struct {
 	baseController
 
-	passportHandler business.PassportBusiness
+	passportBusiness business.PassportBusiness
 }
 
 func NewPassportController() *PassportController {
@@ -26,7 +26,7 @@ func NewPassportController() *PassportController {
 		// 避免使用实际的business/passport目录下的创建方法
 		// 避免调用和具体实现耦合在一起
 		// business目录下的interface.go factory.go 就相当于中间层，将调用方service层与实现方business层解耦
-		passportHandler: business.NewPassportBusiness(definition.VersionLatest),
+		passportBusiness: business.NewPassportBusiness(definition.VersionLatest),
 	}
 }
 
@@ -54,12 +54,12 @@ func (passport *PassportController) Login(c *gin.Context) {
 	// Example 创建对应版本的handler对应版本的business
 	version := definition.Version(util.GetContextStringValue(businessCtx, definition.MetadataVersion))
 
-	passportHandler := passport.passportHandler
+	passportHandler := passport.passportBusiness
 	if version != definition.VersionLatest {
 		passportHandler = business.NewPassportBusiness(version)
 	}
 
-	token, bErr := passportHandler.Login(businessCtx, passportBusiness.LoginParam{
+	token, bErr := passportHandler.Login(businessCtx, passportBusinessPkg.LoginParam{
 		Account:  params.Account,
 		Password: params.Password,
 		ClientIP: c.ClientIP(),
