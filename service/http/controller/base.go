@@ -32,12 +32,12 @@ func (base *baseController) init(c *gin.Context) context.Context {
 	ctx = context.WithValue(ctx, definition.MetadataVersion, "v1")
 	ctx = context.WithValue(ctx, definition.MetadataTimeReciveRequest, time.Now().Unix())
 
-	log.Println("Request (request_id:%s) start with params: %+v", "xxxxxx", c.Request)
+	log.Println("[request_id:%s] Reqeust start with params: %+v", "xxxxxx", c.Request)
 
 	return ctx
 }
 
-func (base *baseController) response(ctx context.Context, err util.Error, data interface{}) {
+func (base *baseController) response(ctx context.Context, err definition.Error, data interface{}) {
 	if err == nil {
 		err = definition.ErrSuccess
 	}
@@ -45,7 +45,7 @@ func (base *baseController) response(ctx context.Context, err util.Error, data i
 	reqeustId := util.GetContextStringValue(ctx, definition.MetadataRequestId)
 	start := util.GetContextInt64Value(ctx, definition.MetadataTimeReciveRequest)
 
-	log.Println("Request (request_id:%s) end with response(reqeust_time:%ds): %+v", reqeustId, util.CalRequestTime(start), data)
+	log.Println("[request_id:%s] Request end with response(reqeust_time:%ds): %+v", reqeustId, util.CalRequestTime(start), data)
 
 	response := make(map[string]interface{})
 	response["code"] = err.ErrCode()
