@@ -5,8 +5,22 @@ const (
 	MetadataRequestId         = "request_id"
 	MetadataDeviceId          = ""
 	MetadataPackageId         = ""
-	MetadataVersion           = ""
+	MetadataRequestSource     = ""
+	MetadataRequestProtocol   = ""
+	MetadataClientVersion     = ""
 	MetadataTimeReciveRequest = ""
+)
+
+// 定义请求来源
+const (
+	RequestSourceApp       = "app"
+	RequestSourceThirdPart = "thirdpart"
+)
+
+// 定义请求协议
+const (
+	RequestProtocolHTTP = "HTTP"
+	RequestProtocolGRPC = "GRPC"
 )
 
 // Environment 定义当前服务环境

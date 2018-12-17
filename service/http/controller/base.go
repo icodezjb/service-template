@@ -27,9 +27,9 @@ func (base *baseController) init(c *gin.Context) context.Context {
 
 	// 携带请求的上下文信息
 	ctx = context.WithValue(ctx, definition.MetadataRequestId, lib.GenRequestId())
-	ctx = context.WithValue(ctx, definition.MetadataDeviceId, "xxxxxxxx")
-	ctx = context.WithValue(ctx, definition.MetadataPackageId, "xxxxxxxx")
-	ctx = context.WithValue(ctx, definition.MetadataVersion, "v1")
+	ctx = context.WithValue(ctx, definition.MetadataRequestSource, definition.RequestSourceThirdPart)
+	ctx = context.WithValue(ctx, definition.MetadataRequestProtocol, definition.RequestProtocolHTTP)
+	ctx = context.WithValue(ctx, definition.MetadataClientVersion, "v1")
 	ctx = context.WithValue(ctx, definition.MetadataTimeReciveRequest, time.Now().Unix())
 
 	log.Println("[request_id:%s] Reqeust start with params: %+v", "xxxxxx", c.Request)

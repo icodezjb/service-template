@@ -52,7 +52,7 @@ func (passport *PassportController) Login(c *gin.Context) {
 	// 加载对应的业务流程实现
 	// 默认使用最新的版本
 	// Example 创建对应版本的handler对应版本的business
-	version := definition.Version(util.GetContextStringValue(businessCtx, definition.MetadataVersion))
+	version := definition.Version(util.GetContextStringValue(businessCtx, definition.MetadataClientVersion))
 
 	passportHandler := passport.passportBusiness
 	if version != definition.VersionLatest {

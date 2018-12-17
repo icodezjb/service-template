@@ -3,6 +3,7 @@ package definition
 // 定义版本号类型
 type Version string
 
+// 定义服务端版本号
 const (
 	VersionLatest Version = ""
 
