@@ -31,8 +31,10 @@ func (b *Business) Login(ctx context.Context, param LoginParam) (string, definit
 	// 检查账号是否存在
 	exist, err := b.userHandler.AccountExists(ctx, param.Account)
 	if err != nil {
-		return "", definition.ErrModuleInvoke.WithSource("(request_id: %s)Login->userHandler.AccountExists", requestId).WithError(err)
+		return "", definition.ErrModuleInvoke.WithSource("Login->userHandler.AccountExists").WithError(err)
 	}
+
+	log.Println("[reqeust_id:%s] xxxxxxxx", requestId)
 
 	if !exist {
 		return "", definition.ErrAccountNotExist.WithSource(param.Account)
@@ -41,7 +43,7 @@ func (b *Business) Login(ctx context.Context, param LoginParam) (string, definit
 	// 检查用户账户安全性，判断是否允许用户登录
 	isSafe, reason, err := b.safeHandler.CheckAccountState(ctx, param.Account)
 	if err != nil {
-		return "", definition.ErrModuleInvoke.WithSource("(request_id: %s)Login->userHandler.CheckAccountState", requestId).WithError(err)
+		return "", definition.ErrModuleInvoke.WithSource("Login->userHandler.CheckAccountState").WithError(err)
 	}
 
 	if !isSafe {
@@ -51,15 +53,15 @@ func (b *Business) Login(ctx context.Context, param LoginParam) (string, definit
 	// 比较用户密码信息
 	pwd, salt, err := b.userHandler.GetUserPassword(ctx, param.Account)
 	if err != nil {
-		return "", definition.ErrModuleInvoke.WithSource("(request_id: %s)Login->userHandler.GetUserPassword", requestId).WithError(err)
+		return "", definition.ErrModuleInvoke.WithSource("Login->userHandler.GetUserPassword").WithError(err)
 	}
 
 	succ, token, err := b.userHandler.CheckUserPassword(ctx, param.Password, pwd, salt)
 	if err != nil {
-		return "", definition.ErrUserLogin.WithSource("(request_id: %s)Login->userHandler.CheckUserPassword", requestId).WithError(err)
+		return "", definition.ErrUserLogin.WithSource("Login->userHandler.CheckUserPassword").WithError(err)
 	}
 	if !succ {
-		return "", definition.ErrUserLogin.WithSource("(request_id: %s)Login->userHandler.CheckUserPassword", requestId).WithError(errors.New("用户密码不正确"))
+		return "", definition.ErrUserLogin.WithSource("Login->userHandler.CheckUserPassword").WithError(errors.New("用户密码不正确"))
 	}
 
 	// 记录用户登录行为
