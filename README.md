@@ -1,2 +1,3 @@
 # service-template
-fuwudemo
+
+golang服务开发规范与标准模板

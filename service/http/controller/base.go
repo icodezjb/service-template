@@ -52,7 +52,7 @@ func (base *baseController) response(ctx context.Context, err definition.Error, 
 	response["message"] = err.ErrMessage()
 
 	if data == nil {
-		// 这么处理就是在空数据返回时，前端看到的是 "data ": {}, 而不是 "data": null
+		// 这么处理就是在空数据返回时，前端看到的是 "data": {}, 而不是 "data": null
 		response["data"] = struct{}{}
 	} else {
 		response["data"] = data
