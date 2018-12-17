@@ -91,5 +91,5 @@ func (e CommonError) Error() string {
 		return e.err.Error()
 	}
 
-	return fmt.Sprintf("code: %d, message: %s", e.Code, e.Message)
+	return fmt.Sprintf("code: %d, message: %s, source:%s, raw error:%v", e.Code, e.Message, e.source, e.err)
 }

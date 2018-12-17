@@ -30,7 +30,7 @@ func (base *baseController) init(c *gin.Context) context.Context {
 	ctx = context.WithValue(ctx, definition.MetadataRequestSource, definition.RequestSourceThirdPart)
 	ctx = context.WithValue(ctx, definition.MetadataRequestProtocol, definition.RequestProtocolHTTP)
 	ctx = context.WithValue(ctx, definition.MetadataClientVersion, "v1")
-	ctx = context.WithValue(ctx, definition.MetadataTimeReciveRequest, time.Now().Unix())
+	ctx = context.WithValue(ctx, definition.MetadataTimeReciveRequest, time.Now().UnixNano())
 
 	log.Println("[request_id:%s] Reqeust start with params: %+v", "xxxxxx", c.Request)
 
@@ -45,7 +45,7 @@ func (base *baseController) response(ctx context.Context, err definition.Error, 
 	reqeustId := util.GetContextStringValue(ctx, definition.MetadataRequestId)
 	start := util.GetContextInt64Value(ctx, definition.MetadataTimeReciveRequest)
 
-	log.Println("[request_id:%s] Request end with response(reqeust_time:%ds): %+v", reqeustId, util.CalRequestTime(start), data)
+	log.Println("[request_id:%s] Request end with response(reqeust_time:%dms): error:%s, data:%+v", reqeustId, util.CalRequestTime(start), err.Error(), data)
 
 	response := make(map[string]interface{})
 	response["code"] = err.ErrCode()
