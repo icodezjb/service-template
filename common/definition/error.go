@@ -1,8 +1,6 @@
 package definition
 
 import (
-	"net/http"
-
 	"errors"
 
 	"fmt"
@@ -11,15 +9,13 @@ import (
 // 业务层统一错误定义
 var (
 	ErrSuccess = CommonError{
-		Code:       0,
-		HttpStatus: http.StatusOK,
-		Message:    "success",
+		Code:    0,
+		Message: "success",
 	}
 
 	ErrParams = CommonError{
-		Code:       100,
-		HttpStatus: http.StatusBadRequest,
-		Message:    "请求参数错误",
+		Code:    100,
+		Message: "请求参数错误",
 	}
 
 	ErrModuleInvoke = CommonError{
@@ -58,9 +54,8 @@ type Error interface {
 }
 
 type CommonError struct {
-	Code       int
-	HttpStatus int
-	Message    string
+	Code    int
+	Message string
 
 	source string
 	err    error
